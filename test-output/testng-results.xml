@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2025-11-04T23:30:19 IST" name="Default suite" finished-at="2025-11-04T23:31:02 IST" duration-ms="42370">
+    <groups>
+    </groups>
+    <test started-at="2025-11-04T23:30:19 IST" name="Default test" finished-at="2025-11-04T23:31:02 IST" duration-ms="42370">
+      <class name="com.rapyuta.qa.tests.PaginationTests">
+        <test-method is-config="true" signature="beforeSuite()[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@179ece50]" started-at="2025-11-04T23:30:19 IST" name="beforeSuite" finished-at="2025-11-04T23:30:19 IST" duration-ms="340" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforeSuite -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@179ece50]" started-at="2025-11-04T23:30:19 IST" name="setUp" finished-at="2025-11-04T23:30:22 IST" duration-ms="2732" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="lastPageEdge()[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@179ece50]" started-at="2025-11-04T23:30:22 IST" name="lastPageEdge" finished-at="2025-11-04T23:31:01 IST" duration-ms="39107" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- lastPageEdge -->
+        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@179ece50]" started-at="2025-11-04T23:31:01 IST" name="tearDown" finished-at="2025-11-04T23:31:02 IST" duration-ms="479" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=lastPageEdge status=SUCCESS method=PaginationTests.lastPageEdge()[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@179ece50] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="afterSuite()[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@179ece50]" started-at="2025-11-04T23:31:02 IST" name="afterSuite" finished-at="2025-11-04T23:31:02 IST" duration-ms="399" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterSuite -->
+      </class> <!-- com.rapyuta.qa.tests.PaginationTests -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="TMDB Regression Suite" parallel="false">
+    <test name="UI Tests">
+        <classes>
+            <class name="com.rapyuta.qa.tests.FilterTests"/>
+            <class name="com.rapyuta.qa.tests.PaginationTests"/>
+        </classes>
+    </test>
+</suite>

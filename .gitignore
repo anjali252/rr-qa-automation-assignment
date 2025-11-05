@@ -1,0 +1,24 @@
+# Maven target folder
+/target/
+
+# TestNG output
+/test-output/
+
+# Reports (Extent, logs, screenshots, etc.)
+/reports/
+/logs/
+/screenshots/
+/networkLogs/
+
+# IntelliJ / Eclipse stuff
+.idea/
+.classpath
+.project
+.settings/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log

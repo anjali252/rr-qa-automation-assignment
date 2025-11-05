@@ -7,7 +7,8 @@ import java.util.logging.Level;
 
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v142.network.Network;
+//Below commented line of code works for Browser V 142
+/*import org.openqa.selenium.devtools.v142.network.Network;*/
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.testng.Assert;
@@ -23,19 +24,24 @@ public class PaginationTests extends BaseTest {
         startTest("TC-P1 - Next/Previous Pagination");
         HomePage home = new HomePage(driver);
         home.open();
-        
-        DevTools devTools = ((HasDevTools) driver).getDevTools();
-        devTools.createSession();
-
+      //below commented code works for Chrome V 142
+		/*
+		 * DevTools devTools = ((HasDevTools) driver).getDevTools();
+		 * devTools.createSession();
+		 */
         try {
-            devTools.send(org.openqa.selenium.devtools.v142.network.Network.enable(Optional.empty(), Optional.empty(), Optional.empty(), java.util.Optional.empty(), java.util.Optional.empty()));
-            List<String> networkEvents = new ArrayList<>();
-            devTools.addListener(Network.responseReceived(), response -> {
-                String url = response.getResponse().getUrl();
-                int status = response.getResponse().getStatus();
-                networkEvents.add("URL: " + url + " | Status: " + status);
-            });
+        	//below commented code works for Chrome V 142
+			/*
+			 * devTools.send(org.openqa.selenium.devtools.v142.network.Network.enable(
+			 * Optional.empty(), Optional.empty(), Optional.empty(),
+			 * java.util.Optional.empty(), java.util.Optional.empty()));
+			 * devTools.addListener(Network.responseReceived(), response -> { String url =
+			 * response.getResponse().getUrl(); int status =
+			 * response.getResponse().getStatus(); networkEvents.add("URL: " + url +
+			 * " | Status: " + status); });
+			 */
             
+            List<String> networkEvents = new ArrayList<>();
             int nextClickCount = 0; 
             
             home.clickCategory("Trend");

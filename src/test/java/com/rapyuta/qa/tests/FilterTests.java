@@ -6,7 +6,8 @@ import java.util.logging.Logger;
 
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v142.network.Network;
+//Below commented line of code works for Browser V 142
+/*import org.openqa.selenium.devtools.v142.network.Network;*/
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -31,20 +32,27 @@ public class FilterTests extends BaseTest {
         startTest("TC-F2 - Switch Categories");
         HomePage home = new HomePage(driver);
         home.open();
-        DevTools devTools = ((HasDevTools)driver).getDevTools();
-        devTools.createSession();
+      //below commented code works for Chrome V 142
+		/*
+		 * DevTools devTools = ((HasDevTools)driver).getDevTools();
+		 * devTools.createSession();
+		 */
         try {
-        devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
+        	//below commented code works for Chrome V 142
+			/*
+			 * devTools.send(Network.enable(Optional.empty(), Optional.empty(),
+			 * Optional.empty(), Optional.empty(), Optional.empty()));
+			 */
         String[] cats = new String[]{"Trend", "Newest", "Top Rated"};
         String prevFirst = "";
         for (String c : cats) {
-        	devTools.addListener(Network.responseReceived(), response -> {
-        	   String url = response.getResponse().getUrl();
-        	   int status = response.getResponse().getStatus();
-        	   if (url.contains("/discover")) {
-        	       Assert.assertTrue(status == 200, "API call should be 200");
-        	   }
-        	});
+        	//below commented code works for Chrome V 142
+			/*
+			 * devTools.addListener(Network.responseReceived(), response -> { String url =
+			 * response.getResponse().getUrl(); int status =
+			 * response.getResponse().getStatus(); if (url.contains("/discover")) {
+			 * Assert.assertTrue(status == 200, "API call should be 200"); } });
+			 */
 
             home.clickCategory(c);
             test.info("Clicked " + c);

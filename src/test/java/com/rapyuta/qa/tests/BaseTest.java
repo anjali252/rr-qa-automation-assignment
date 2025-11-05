@@ -66,9 +66,9 @@ public class BaseTest {
             } else if (result.getStatus() == ITestResult.SUCCESS) {
             	log.info("Test passed");
                 test.pass("Test passed");
-            } else {
-            	log.info("Test skipped");
-                test.skip("Test skipped");
+            } if (result.getStatus() == ITestResult.SKIP && test != null) {
+                log.info("Test skipped");
+            	test.skip("Test skipped");
             }
         } catch (Exception e) {
         	log.log(Level.SEVERE, "Error during tearDown", e);

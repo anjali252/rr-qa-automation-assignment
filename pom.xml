@@ -44,12 +44,13 @@
             <artifactId>webdrivermanager</artifactId>
             <version>5.9.2</version>
         </dependency>
+        <!-- Below commented dependency works for Chrome V 142-->
 <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-devtools-v142 -->
-<dependency>
+<!--<dependency>
     <groupId>org.seleniumhq.selenium</groupId>
     <artifactId>selenium-devtools-v142</artifactId>
     <version>4.38.0</version>
-</dependency>
+</dependency>-->
     </dependencies>
 
 

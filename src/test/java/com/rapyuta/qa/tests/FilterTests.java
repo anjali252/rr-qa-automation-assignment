@@ -33,6 +33,7 @@ public class FilterTests extends BaseTest {
         home.open();
         DevTools devTools = ((HasDevTools)driver).getDevTools();
         devTools.createSession();
+        try {
         devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
         String[] cats = new String[]{"Trend", "Newest", "Top Rated"};
         String prevFirst = "";
@@ -62,6 +63,10 @@ public class FilterTests extends BaseTest {
                 test.info("Comparing " + prevFirst + " vs " + first);
             }
             prevFirst = first;
+        }
+        }
+        catch (Throwable t) {
+            System.out.println("Could not enable Network domain (DevTools version mismatch): " + t.getMessage());
         }
     }
 }

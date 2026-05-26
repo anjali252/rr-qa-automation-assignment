@@ -1,8 +1,13 @@
 package com.rapyuta.qa.tests;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -110,6 +115,96 @@ public class FilterTests extends BaseTest {
 	        test.fail("Unexpected exception: " + e.getMessage());
 	        log.severe("TC-F4 failed with exception: " + e.getMessage());
 	        throw e;
+	    }
+	}
+	
+	@Test(description = "TC-F5: Verify header search by title returns matching results.")
+	public void searchByTitle() {
+	    startTest("TC-F5 - Search by Title");
+	    try {
+	        test.info("Opening home page...");
+	        HomePage home = new HomePage(driver);
+	        home.open();
+	        test.info("Home page opened.");
+
+	        String searchTerm = "Batman";
+	        test.info("Searching for title: " + searchTerm);
+
+	        // Header search input
+	        WebElement searchBox = new WebDriverWait(driver, Duration.ofSeconds(10))
+	            .until(ExpectedConditions.visibilityOfElementLocated(
+	                By.cssSelector("input[name='search']")));
+	        searchBox.clear();
+	        searchBox.sendKeys(searchTerm);
+	        Thread.sleep(1500); // allow results to filter
+
+	        List<String> titles = home.getResultTitles();
+	        test.info("Results returned: " + titles.size());
+
+	        Assert.assertFalse(titles.isEmpty(),
+	            "Expected results for title search: " + searchTerm);
+
+	        boolean anyMatch = titles.stream()
+	            .anyMatch(t -> t.toLowerCase().contains(searchTerm.toLowerCase()));
+	        Assert.assertTrue(anyMatch,
+	            "At least one result should contain: " + searchTerm);
+
+	        test.pass("Title search returned matching results.");
+	    } catch (AssertionError ae) {
+	        test.fail("Assertion failed: " + ae.getMessage());
+	        throw ae;
+	    } catch (Exception e) {
+	        test.fail("Exception: " + e.getMessage());
+	        throw new RuntimeException(e);
+	    }
+	}
+	
+	@Test(description = "TC-F6: Verify rating filter changes results. BUG-05 — results unchanged regardless of rating selected.")
+	public void filterByRating() {
+	    startTest("TC-F6 - Filter by Rating");
+	    try {
+	        test.info("Opening home page...");
+	        HomePage home = new HomePage(driver);
+	        home.open();
+	        test.info("Home page opened.");
+
+	        // Get baseline results with no rating filter
+	        List<String> baselineTitles = home.getResultTitles();
+	        test.info("Baseline results (no filter): " + baselineTitles.size());
+
+	        // Apply 1 star rating
+	        home.setRating(1);
+	        test.info("Rating filter applied: 1 star & up");
+	        Thread.sleep(1500);
+	        List<String> oneStar = home.getResultTitles();
+	        test.info("Results after 1 star: " + oneStar.size());
+
+	        // Apply 5 star rating
+	        home.setRating(5);
+	        test.info("Rating filter applied: 5 stars & up");
+	        Thread.sleep(1500);
+	        List<String> fiveStar = home.getResultTitles();
+	        test.info("Results after 5 stars: " + fiveStar.size());
+
+	        // Results should differ between 1 star and 5 star
+	        // If identical — rating filter is not working
+	        if (oneStar.equals(fiveStar)) {
+	            takeScreenshot("BUG05_RatingFilter_NoEffect");
+	            test.warning("BUG-05: Rating filter has no effect — " 
+	                + "1 star and 5 star return identical results: " + fiveStar);
+	            Assert.fail("BUG-05: Rating filter does not change results. " 
+	                + "1-star and 5-star filters return identical " 
+	                + fiveStar.size() + " results.");
+	        } else {
+	            test.pass("Rating filter working — different results for different ratings.");
+	        }
+
+	    } catch (AssertionError ae) {
+	        test.fail("Assertion failed: " + ae.getMessage());
+	        throw ae;
+	    } catch (Exception e) {
+	        test.fail("Exception: " + e.getMessage());
+	        throw new RuntimeException(e);
 	    }
 	}
 	

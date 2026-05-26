@@ -51,18 +51,9 @@ public class HomePage {
 
     public void clickCategory(String name) {
     	log.info("Attempting to click category: " + name);
-    	
-        List<WebElement> cats = driver.findElements(categoryLinks);
-        for (WebElement e : cats) {
-            if (e.getText().trim().equalsIgnoreCase(name)) {
-            	log.info("Clicking category link: " + e.getText());
-                e.click();
-                return;
-            }
-        }
-        String msg = "Category not found: " + name;
-        log.severe(msg);
-        throw new RuntimeException(msg);
+    	By categoryLocator = By.xpath("//nav//li[text()='" + name + "']");
+    	log.info("Clicking category link: " + driver.findElement(categoryLocator).getText());
+    	driver.findElement(categoryLocator).click();
     }
 
     public List<String> getResultTitles() {
@@ -190,14 +181,25 @@ public class HomePage {
     }
 
     public void setRating(int stars) {
-        log.info("Setting rating: " + stars + " stars");
+        log.info("Setting rating filter: " + stars + " stars and above");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        List<WebElement> starElements = wait.until(
-            ExpectedConditions.visibilityOfAllElementsLocatedBy(ratingStars));
-        starElements.get(stars - 1)
-                    .findElement(By.cssSelector(".rc-rate-star-second"))
-                    .click();
-        log.info("Rating set to: " + stars + " stars and above");
+
+        // Wait for all star elements to be present
+        List<WebElement> starDivs = wait.until(
+            ExpectedConditions.presenceOfAllElementsLocatedBy(
+                By.cssSelector("li.rc-rate-star div[role='radio']")));
+
+        if (stars >= 1 && stars <= starDivs.size()) {
+            WebElement targetStar = starDivs.get(stars - 1);
+
+            // Use JavaScript click to bypass element interception
+            ((org.openqa.selenium.JavascriptExecutor) driver)
+                .executeScript("arguments[0].click();", targetStar);
+
+            log.info("Rating set to: " + stars + " stars and above via JS click");
+        } else {
+            log.warning("Invalid star count: " + stars);
+        }
     }
     
     public List<String> getResultGenres() {

@@ -30,7 +30,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Run tests
-        run: mvn clean test
+        run: mvn clean test -Dheadless=true
 
       - name: Upload Extent Report
         uses: actions/upload-artifact@v4

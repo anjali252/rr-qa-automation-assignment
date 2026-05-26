@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+  <meta charset='utf-8'>
+  <title>TestNG reports</title>
+
+    <link type="text/css" href="testng-reports1.css" rel="stylesheet" id="ultra" />
+    <link type="text/css" href="testng-reports.css" rel="stylesheet" id="retro" disabled="false"/>
+    <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="testng-reports.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type='text/javascript'>
+      google.load('visualization', '1', {packages:['table']});
+      google.setOnLoadCallback(drawTable);
+      var suiteTableInitFunctions = new Array();
+      var suiteTableData = new Array();
+    </script>
+    <!--
+      <script type="text/javascript" src="jquery-ui/js/jquery-ui-1.8.16.custom.min.js"></script>
+     -->
+  </head>
+
+  <body>    <div class="top-banner-root">
+      <span class="top-banner-title-font">Test results</span>
+      <button id="button" class="button">Switch Retro Theme</button> <!-- button -->
+      <br/>
+      <span class="top-banner-font-1">1 suite, 4 failed tests</span>
+    </div> <!-- top-banner-root -->
+    <div class="navigator-root">
+      <div class="navigator-suite-header">
+        <span>All suites</span>
+        <a href="#" title="Collapse/expand all the suites" class="collapse-all-link">
+          <img src="collapseall.gif" class="collapse-all-icon">
+          </img> <!-- collapse-all-icon -->
+        </a> <!-- collapse-all-link -->
+      </div> <!-- navigator-suite-header -->
+      <div class="suite">
+        <div class="rounded-window">
+          <div class="suite-header light-rounded-window-top">
+            <a href="#" panel-name="suite-TMDB_Regression_Suite" class="navigator-link">
+              <span class="suite-name border-failed">TMDB Regression Suite</span>
+            </a> <!-- navigator-link -->
+          </div> <!-- suite-header light-rounded-window-top -->
+          <div class="navigator-suite-content">
+            <div class="suite-section-title">
+              <span>Info</span>
+            </div> <!-- suite-section-title -->
+            <div class="suite-section-content">
+              <ul>
+                <li>
+                  <a href="#" panel-name="test-xml-TMDB_Regression_Suite" class="navigator-link ">
+                    <span>C:\Users\Arun\Downloads\rr-qa-automation-assignment-master\testng.xml</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="testlist-TMDB_Regression_Suite" class="navigator-link ">
+                    <span class="test-stats">1 test</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="group-TMDB_Regression_Suite" class="navigator-link ">
+                    <span>0 groups</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="times-TMDB_Regression_Suite" class="navigator-link ">
+                    <span>Times</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="reporter-TMDB_Regression_Suite" class="navigator-link ">
+                    <span>Reporter output</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="ignored-methods-TMDB_Regression_Suite" class="navigator-link ">
+                    <span>Ignored methods</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+                <li>
+                  <a href="#" panel-name="chronological-TMDB_Regression_Suite" class="navigator-link ">
+                    <span>Chronological view</span>
+                  </a> <!-- navigator-link  -->
+                </li>
+              </ul>
+            </div> <!-- suite-section-content -->
+            <div class="result-section">
+              <div class="suite-section-title">
+                <span>Results</span>
+              </div> <!-- suite-section-title -->
+              <div class="suite-section-content">
+                <ul>
+                  <li>
+                    <span class="method-stats">8 methods, 4 failed,   4 passed</span>
+                  </li>
+                  <li>
+                    <span class="method-list-title failed">Failed methods</span>
+                    <span class="show-or-hide-methods failed">
+                      <a href="#" panel-name="suite-TMDB_Regression_Suite" class="hide-methods failed suite-TMDB_Regression_Suite"> (hide)</a> <!-- hide-methods failed suite-TMDB_Regression_Suite -->
+                      <a href="#" panel-name="suite-TMDB_Regression_Suite" class="show-methods failed suite-TMDB_Regression_Suite"> (show)</a> <!-- show-methods failed suite-TMDB_Regression_Suite -->
+                    </span>
+                    <div class="method-list-content failed suite-TMDB_Regression_Suite">
+                      <span>
+                        <img src="failed.png" width="3%"/>
+                        <a href="#" panel-name="suite-TMDB_Regression_Suite" title="com.rapyuta.qa.tests.FilterTests" class="method navigator-link" hash-for-method="directUrlNavigation">directUrlNavigation</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="failed.png" width="3%"/>
+                        <a href="#" panel-name="suite-TMDB_Regression_Suite" title="com.rapyuta.qa.tests.FilterTests" class="method navigator-link" hash-for-method="filterByGenre">filterByGenre</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="failed.png" width="3%"/>
+                        <a href="#" panel-name="suite-TMDB_Regression_Suite" title="com.rapyuta.qa.tests.FilterTests" class="method navigator-link" hash-for-method="filterByYearRange">filterByYearRange</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="failed.png" width="3%"/>
+                        <a href="#" panel-name="suite-TMDB_Regression_Suite" title="com.rapyuta.qa.tests.PaginationTests" class="method navigator-link" hash-for-method="lastPageEdge">lastPageEdge</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                    </div> <!-- method-list-content failed suite-TMDB_Regression_Suite -->
+                  </li>
+                  <li>
+                    <span class="method-list-title passed">Passed methods</span>
+                    <span class="show-or-hide-methods passed">
+                      <a href="#" panel-name="suite-TMDB_Regression_Suite" class="hide-methods passed suite-TMDB_Regression_Suite"> (hide)</a> <!-- hide-methods passed suite-TMDB_Regression_Suite -->
+                      <a href="#" panel-name="suite-TMDB_Regression_Suite" class="show-methods passed suite-TMDB_Regression_Suite"> (show)</a> <!-- show-methods passed suite-TMDB_Regression_Suite -->
+                    </span>
+                    <div class="method-list-content passed suite-TMDB_Regression_Suite">
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-TMDB_Regression_Suite" title="com.rapyuta.qa.tests.FilterTests" class="method navigator-link" hash-for-method="filterByType">filterByType</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-TMDB_Regression_Suite" title="com.rapyuta.qa.tests.PaginationTests" class="method navigator-link" hash-for-method="nextPrevPagination">nextPrevPagination</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-TMDB_Regression_Suite" title="com.rapyuta.qa.tests.FilterTests" class="method navigator-link" hash-for-method="popularCategoryLoads">popularCategoryLoads</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-TMDB_Regression_Suite" title="com.rapyuta.qa.tests.FilterTests" class="method navigator-link" hash-for-method="switchCategories">switchCategories</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                    </div> <!-- method-list-content passed suite-TMDB_Regression_Suite -->
+                  </li>
+                </ul>
+              </div> <!-- suite-section-content -->
+            </div> <!-- result-section -->
+          </div> <!-- navigator-suite-content -->
+        </div> <!-- rounded-window -->
+      </div> <!-- suite -->
+    </div> <!-- navigator-root -->
+    <div class="wrapper">
+      <div class="main-panel-root">
+        <div panel-name="suite-TMDB_Regression_Suite" class="panel TMDB_Regression_Suite">
+          <div class="suite-TMDB_Regression_Suite-class-failed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="failed.png"/>
+              <span class="class-name">com.rapyuta.qa.tests.PaginationTests</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="lastPageEdge">
+                  </a> <!-- lastPageEdge -->
+                  <span class="method-name">lastPageEdge</span>
+                  <div class="stack-trace">java.lang.AssertionError: BUG-02: Last page returns error instead of results.
+	at com.rapyuta.qa.tests.PaginationTests.lastPageEdge(PaginationTests.java:143)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+... Removed 26 stack frames
+</div> <!-- stack-trace -->
+                  <em>
+(TC-P2: Verify last page edge case. BUG-02 — error shown on last pages.)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-TMDB_Regression_Suite-class-failed -->
+          <div class="suite-TMDB_Regression_Suite-class-failed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="failed.png"/>
+              <span class="class-name">com.rapyuta.qa.tests.FilterTests</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="directUrlNavigation">
+                  </a> <!-- directUrlNavigation -->
+                  <span class="method-name">directUrlNavigation</span>
+                  <div class="stack-trace">java.lang.AssertionError: BUG-01: Direct URL &apos;https://tmdb-discover.surge.sh/popular&apos; not working — 404 page displayed.
+	at com.rapyuta.qa.tests.FilterTests.directUrlNavigation(FilterTests.java:196)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+... Removed 26 stack frames
+</div> <!-- stack-trace -->
+                  <em>
+(TC-F8: Verify direct URL navigation. BUG-01 — Surge.sh 404 shown on direct access.)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="filterByGenre">
+                  </a> <!-- filterByGenre -->
+                  <span class="method-name">filterByGenre</span>
+                  <div class="stack-trace">java.lang.AssertionError: BUG-04: Genre filter returned non-matching genres: [Horror, Animation, Thriller, Science Fiction, Adventure, Science Fiction, Thriller, History, Science Fiction, Comedy, Thriller]
+	at com.rapyuta.qa.tests.FilterTests.filterByGenre(FilterTests.java:145)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+... Removed 26 stack frames
+</div> <!-- stack-trace -->
+                  <em>
+(TC-F7: Verify genre filter. BUG-04 — mixed genres returned.)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="filterByYearRange">
+                  </a> <!-- filterByYearRange -->
+                  <span class="method-name">filterByYearRange</span>
+                  <div class="stack-trace">java.lang.AssertionError: BUG-03: Year filter includes out-of-range results: [2018, 2011, 1997, 1998, 2010, 2005, 2015, 2017, 2015]
+	at com.rapyuta.qa.tests.FilterTests.filterByYearRange(FilterTests.java:99)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+... Removed 26 stack frames
+</div> <!-- stack-trace -->
+                  <em>
+(TC-F4: Verify year range filter. BUG-03 — includes out-of-range results.)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-TMDB_Regression_Suite-class-failed -->
+          <div class="suite-TMDB_Regression_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">com.rapyuta.qa.tests.PaginationTests</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="nextPrevPagination">
+                  </a> <!-- nextPrevPagination -->
+                  <span class="method-name">nextPrevPagination</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-TMDB_Regression_Suite-class-passed -->
+          <div class="suite-TMDB_Regression_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">com.rapyuta.qa.tests.FilterTests</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="filterByType">
+                  </a> <!-- filterByType -->
+                  <span class="method-name">filterByType</span>
+                  <em>
+(TC-F3: Verify filtering by Type (Movie / TV Show) returns non-empty results.)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="popularCategoryLoads">
+                  </a> <!-- popularCategoryLoads -->
+                  <span class="method-name">popularCategoryLoads</span>
+                  <em>
+(TC-F1: Verify the default 'Popular' category loads with visible results on page load.)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="switchCategories">
+                  </a> <!-- switchCategories -->
+                  <span class="method-name">switchCategories</span>
+                  <em>
+(TC-F2: Verify switching between Trending, Newest, and Top Rated categories returns unique results.)                  </em>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-TMDB_Regression_Suite-class-passed -->
+        </div> <!-- panel TMDB_Regression_Suite -->
+        <div panel-name="test-xml-TMDB_Regression_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">C:\Users\Arun\Downloads\rr-qa-automation-assignment-master\testng.xml</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <pre>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE suite SYSTEM &quot;https://testng.org/testng-1.0.dtd&quot;&gt;
+&lt;suite name=&quot;TMDB Regression Suite&quot; guice-stage=&quot;DEVELOPMENT&quot;&gt;
+  &lt;test thread-count=&quot;5&quot; name=&quot;UI Tests&quot;&gt;
+    &lt;classes&gt;
+      &lt;class name=&quot;com.rapyuta.qa.tests.FilterTests&quot;/&gt;
+      &lt;class name=&quot;com.rapyuta.qa.tests.PaginationTests&quot;/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt; &lt;!-- UI Tests --&gt;
+&lt;/suite&gt; &lt;!-- TMDB Regression Suite --&gt;
+            </pre>
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="testlist-TMDB_Regression_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Tests for TMDB Regression Suite</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <ul>
+              <li>
+                <span class="test-name">UI Tests (2 classes)</span>
+              </li>
+            </ul>
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="group-TMDB_Regression_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Groups for TMDB Regression Suite</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="times-TMDB_Regression_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Times for TMDB Regression Suite</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <div class="times-div">
+              <script type="text/javascript">
+suiteTableInitFunctions.push('tableData_TMDB_Regression_Suite');
+function tableData_TMDB_Regression_Suite() {
+var data = new google.visualization.DataTable();
+data.addColumn('number', 'Number');
+data.addColumn('string', 'Method');
+data.addColumn('string', 'Class');
+data.addColumn('number', 'Time (ms)');
+data.addRows(8);
+data.setCell(0, 0, 0)
+data.setCell(0, 1, 'directUrlNavigation')
+data.setCell(0, 2, 'com.rapyuta.qa.tests.FilterTests')
+data.setCell(0, 3, 52178);
+data.setCell(1, 0, 1)
+data.setCell(1, 1, 'lastPageEdge')
+data.setCell(1, 2, 'com.rapyuta.qa.tests.PaginationTests')
+data.setCell(1, 3, 14751);
+data.setCell(2, 0, 2)
+data.setCell(2, 1, 'filterByType')
+data.setCell(2, 2, 'com.rapyuta.qa.tests.FilterTests')
+data.setCell(2, 3, 8522);
+data.setCell(3, 0, 3)
+data.setCell(3, 1, 'filterByYearRange')
+data.setCell(3, 2, 'com.rapyuta.qa.tests.FilterTests')
+data.setCell(3, 3, 4723);
+data.setCell(4, 0, 4)
+data.setCell(4, 1, 'switchCategories')
+data.setCell(4, 2, 'com.rapyuta.qa.tests.FilterTests')
+data.setCell(4, 3, 4682);
+data.setCell(5, 0, 5)
+data.setCell(5, 1, 'nextPrevPagination')
+data.setCell(5, 2, 'com.rapyuta.qa.tests.PaginationTests')
+data.setCell(5, 3, 4368);
+data.setCell(6, 0, 6)
+data.setCell(6, 1, 'filterByGenre')
+data.setCell(6, 2, 'com.rapyuta.qa.tests.FilterTests')
+data.setCell(6, 3, 3018);
+data.setCell(7, 0, 7)
+data.setCell(7, 1, 'popularCategoryLoads')
+data.setCell(7, 2, 'com.rapyuta.qa.tests.FilterTests')
+data.setCell(7, 3, 1549);
+window.suiteTableData['TMDB_Regression_Suite']= { tableData: data, tableDiv: 'times-div-TMDB_Regression_Suite'}
+return data;
+}
+              </script>
+              <span class="suite-total-time">Total running time: 1 minutes</span>
+              <div id="times-div-TMDB_Regression_Suite">
+              </div> <!-- times-div-TMDB_Regression_Suite -->
+            </div> <!-- times-div -->
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="reporter-TMDB_Regression_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Reporter output for TMDB Regression Suite</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="ignored-methods-TMDB_Regression_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">2 ignored methods</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <div class="ignored-class-div">
+              <span class="ignored-class-name">com.rapyuta.qa.tests.PaginationTests</span>
+              <div class="ignored-methods-div">
+                <span class="ignored-method-name">beforeSuite</span>
+                <br/>
+                <span class="ignored-method-name">afterSuite</span>
+                <br/>
+              </div> <!-- ignored-methods-div -->
+            </div> <!-- ignored-class-div -->
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+        <div panel-name="chronological-TMDB_Regression_Suite" class="panel">
+          <div class="main-panel-header rounded-window-top">
+            <span class="header-content">Methods in chronological order</span>
+          </div> <!-- main-panel-header rounded-window-top -->
+          <div class="main-panel-content rounded-window-bottom">
+            <div class="chronological-class">
+              <div class="chronological-class-name">com.rapyuta.qa.tests.FilterTests</div> <!-- chronological-class-name -->
+              <div class="configuration-suite before">
+                <span class="method-name">beforeSuite</span>
+                <span class="method-start">0 ms</span>
+              </div> <!-- configuration-suite before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">843 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <img src="failed.png">
+                </img>
+                <span class="method-name">directUrlNavigation</span>
+                <span class="method-start">3557 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown([TestResult name=directUrlNavigation status=FAILURE method=FilterTests.directUrlNavigation()[pri:0, ...)</span>
+                <span class="method-start">55742 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">56091 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <img src="failed.png">
+                </img>
+                <span class="method-name">filterByGenre</span>
+                <span class="method-start">57731 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown([TestResult name=filterByGenre status=FAILURE method=FilterTests.filterByGenre()[pri:0, instance:com...)</span>
+                <span class="method-start">60749 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">61124 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">filterByType</span>
+                <span class="method-start">62601 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown([TestResult name=filterByType status=SUCCESS method=FilterTests.filterByType()[pri:0, instance:com.r...)</span>
+                <span class="method-start">71128 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">71358 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <img src="failed.png">
+                </img>
+                <span class="method-name">filterByYearRange</span>
+                <span class="method-start">72925 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown([TestResult name=filterByYearRange status=FAILURE method=FilterTests.filterByYearRange()[pri:0, inst...)</span>
+                <span class="method-start">77650 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">78550 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">popularCategoryLoads</span>
+                <span class="method-start">80638 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown([TestResult name=popularCategoryLoads status=SUCCESS method=FilterTests.popularCategoryLoads()[pri:0...)</span>
+                <span class="method-start">82190 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">82685 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">switchCategories</span>
+                <span class="method-start">84307 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown([TestResult name=switchCategories status=SUCCESS method=FilterTests.switchCategories()[pri:0, instan...)</span>
+                <span class="method-start">88991 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">com.rapyuta.qa.tests.PaginationTests</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">89318 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <img src="failed.png">
+                </img>
+                <span class="method-name">lastPageEdge</span>
+                <span class="method-start">90809 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown([TestResult name=lastPageEdge status=FAILURE method=PaginationTests.lastPageEdge()[pri:0, instance:c...)</span>
+                <span class="method-start">105562 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp</span>
+                <span class="method-start">106032 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">nextPrevPagination</span>
+                <span class="method-start">107518 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown([TestResult name=nextPrevPagination status=SUCCESS method=PaginationTests.nextPrevPagination()[pri:0...)</span>
+                <span class="method-start">111889 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">com.rapyuta.qa.tests.FilterTests</div> <!-- chronological-class-name -->
+              <div class="configuration-suite after">
+                <span class="method-name">afterSuite</span>
+                <span class="method-start">112813 ms</span>
+              </div> <!-- configuration-suite after -->
+          </div> <!-- main-panel-content rounded-window-bottom -->
+        </div> <!-- panel -->
+      </div> <!-- main-panel-root -->
+    </div> <!-- wrapper -->
+  </body>
+<script type="text/javascript" src="testng-reports2.js"></script>
+</html>

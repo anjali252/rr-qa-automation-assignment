@@ -5,7 +5,7 @@
 
 ## 1. Objective
 
-Validate the functional behaviour of the TMDB Discover demo application (`https://tmdb-discover.surge.sh/`) through automated UI testing. The plan covers filter options, pagination, direct URL navigation, and browser API call assertions. Defects identified during testing are documented for discussion.
+Validate the functional behaviour of the TMDB Discover demo application (`https://tmdb-discover.surge.sh/`) through automated UI testing. The plan covers filter options (including Rating and Search), pagination, direct URL navigation, and browser API call assertions. Defects identified during testing are documented for discussion.
 
 ---
 
@@ -13,7 +13,7 @@ Validate the functional behaviour of the TMDB Discover demo application (`https:
 
 ### In Scope
 - Category navigation (Popular, Trend, Newest, Top Rated)
-- Filter options: Type, Genre, Year range, Rating
+- Filter options: Type, Genre, Year range, Rating, Search keyword
 - Pagination: Next, Previous, direct last page navigation
 - Direct URL access to category routes
 - Browser network call assertions via CDP / performance logs
@@ -60,9 +60,9 @@ The suite uses **functional UI automation** as the primary approach. Each test v
 
 | Type | Description | Applied To |
 |---|---|---|
-| Positive | Valid inputs, expected successful outcome | TC-F1, TC-F2, TC-F3, TC-P1 |
-| Negative | Invalid/edge inputs, expected failure or error | TC-F4, TC-F7, TC-F8, TC-P2 |
-| Defect Validation | Intentionally exercises known broken behaviour | TC-F4 (BUG-03), TC-F7 (BUG-04), TC-F8 (BUG-01), TC-P2 (BUG-02) |
+| Positive | Valid inputs, expected successful outcome | TC-F1, TC-F2, TC-F3, TC-F6, TC-P1 |
+| Negative | Invalid/edge inputs, expected failure or error | TC-F4, TC-F5, TC-F7, TC-F8, TC-P2 |
+| Defect Validation | Intentionally exercises known broken behaviour | TC-F4 (BUG-03), TC-F5 (BUG-05), TC-F7 (BUG-04), TC-F8 (BUG-01), TC-P2 (BUG-02) |
 
 ### 5.3 Browser API Testing
 Selenium 4 CDP (Chrome DevTools Protocol) and Chrome performance logs are used to:
@@ -124,6 +124,30 @@ Selenium 4 CDP (Chrome DevTools Protocol) and Chrome performance logs are used t
 
 ---
 
+#### TC-F5 — Filter by Rating (Defect Validation — BUG-05)
+| Field | Details |
+|---|---|
+| **Precondition** | App is loaded |
+| **Steps** | 1. Note the default result set with no rating filter applied <br> 2. Select a minimum star rating (e.g. **7 stars**) <br> 3. Compare the result set to the unfiltered state |
+| **Expected Result** | Results are filtered to show only items with a rating at or above the selected value; result set changes visibly |
+| **Actual Result** | Result set is identical to the unfiltered state — the rating filter has no effect |
+| **Type** | Negative / Defect Validation |
+| **Design Technique** | Equivalence Partitioning, Boundary Value Analysis |
+| **Bug** | BUG-05 |
+
+---
+
+#### TC-F6 — Search by Keyword
+| Field | Details |
+|---|---|
+| **Precondition** | App is loaded |
+| **Steps** | 1. Enter a known movie or TV show title (e.g. **"Inception"**) into the search input <br> 2. Wait for results to update <br> 3. Verify results contain titles relevant to the search term |
+| **Expected Result** | Result cards include titles matching or related to the entered keyword; result count is greater than zero |
+| **Type** | Positive |
+| **Design Technique** | Equivalence Partitioning |
+
+---
+
 #### TC-F7 — Filter by Genre (Defect Validation — BUG-04)
 | Field | Details |
 |---|---|
@@ -182,8 +206,8 @@ Selenium 4 CDP (Chrome DevTools Protocol) and Chrome performance logs are used t
 
 | Technique | Applied To | Rationale |
 |---|---|---|
-| **Equivalence Partitioning** | TC-F1, TC-F3, TC-F7 | Group valid/invalid inputs into representative classes |
-| **Boundary Value Analysis** | TC-F4, TC-P2 | Year range boundaries (2019/2021); first and last pages |
+| **Equivalence Partitioning** | TC-F1, TC-F3, TC-F5, TC-F6, TC-F7 | Group valid/invalid inputs into representative classes; rating ≥ 7 as a valid class; known keyword vs. gibberish |
+| **Boundary Value Analysis** | TC-F4, TC-F5, TC-P2 | Year range boundaries (2019/2021); minimum and maximum star rating; first and last pages |
 | **State Transition Testing** | TC-F2, TC-P1 | App state changes across category switches and pagination |
 | **Error Guessing** | TC-F8, TC-P2 | Common SPA failure points — direct URL routing, large dataset last pages |
 
@@ -255,11 +279,28 @@ Selenium 4 CDP (Chrome DevTools Protocol) and Chrome performance logs are used t
 
 ---
 
+### BUG-05 — Rating Filter Has No Effect
+
+| Field | Details |
+|---|---|
+| **ID** | BUG-05 |
+| **Title** | Selecting a star rating filter does not change the result set |
+| **Steps** | 1. Load app <br> 2. Note the default results with no rating selected <br> 3. Select a minimum rating (e.g. 7 stars) <br> 4. Compare results to the default state |
+| **Expected** | Results are filtered to items rated at or above the selected minimum; result set visibly changes |
+| **Actual** | Result set is identical to the unfiltered state regardless of which rating is selected |
+| **Root Cause** | Rating filter value is likely not being passed as a query parameter to the TMDB API, or the parameter name/format is incorrect |
+| **Severity** | Medium |
+| **Status** | Open |
+| **Automated** | ✅ TC-F5 |
+
+---
+
 ## 9. Risk and Assumptions
 
 | Risk | Mitigation |
 |---|---|
 | Demo site content changes between runs | Tests assert structural behaviour (count > 0, title length > 2) rather than specific content values |
 | React Select dropdowns are not native `<select>` elements | Custom `selectReactDropdown()` method handles open → type → click pattern |
+| Search input may debounce or require explicit trigger | Page method waits for result list to stabilise after input before asserting |
 | Last page number changes as TMDB data grows | Test targets last visible page number dynamically via `aria-label` rather than a hardcoded value |
 | Chrome version mismatch for CDP DevTools API | Performance log approach used as version-agnostic alternative |

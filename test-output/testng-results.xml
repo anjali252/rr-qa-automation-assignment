@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="8" passed="4" failed="4" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2026-05-26T13:35:21 IST" name="TMDB Regression Suite" finished-at="2026-05-26T13:37:13 IST" duration-ms="111950">
+    <groups>
+    </groups>
+    <test started-at="2026-05-26T13:35:21 IST" name="UI Tests" finished-at="2026-05-26T13:37:13 IST" duration-ms="111950">
+      <class name="com.rapyuta.qa.tests.FilterTests">
+        <test-method is-config="true" signature="beforeSuite()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:35:20 IST" name="beforeSuite" finished-at="2026-05-26T13:35:21 IST" duration-ms="809" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforeSuite -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:35:21 IST" name="setUp" finished-at="2026-05-26T13:35:24 IST" duration-ms="2713" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="directUrlNavigation()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:35:24 IST" name="directUrlNavigation" description="TC-F8: Verify direct URL navigation. BUG-01 — Surge.sh 404 shown on direct access." finished-at="2026-05-26T13:36:16 IST" duration-ms="52178" status="FAIL">
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[BUG-01: Direct URL 'https://tmdb-discover.surge.sh/popular' not working — 404 page displayed.]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: BUG-01: Direct URL 'https://tmdb-discover.surge.sh/popular' not working — 404 page displayed.
+at org.testng.Assert.fail(Assert.java:111)
+at com.rapyuta.qa.tests.FilterTests.directUrlNavigation(FilterTests.java:196)
+at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+at org.testng.TestRunner.privateRun(TestRunner.java:739)
+at org.testng.TestRunner.run(TestRunner.java:614)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+at org.testng.TestNG.runSuites(TestNG.java:1112)
+at org.testng.TestNG.run(TestNG.java:1079)
+at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
+at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- directUrlNavigation -->
+        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:16 IST" name="tearDown" finished-at="2026-05-26T13:36:16 IST" duration-ms="349" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=directUrlNavigation status=FAILURE method=FilterTests.directUrlNavigation()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:16 IST" name="setUp" finished-at="2026-05-26T13:36:18 IST" duration-ms="1640" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="filterByGenre()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:18 IST" name="filterByGenre" description="TC-F7: Verify genre filter. BUG-04 — mixed genres returned." finished-at="2026-05-26T13:36:21 IST" duration-ms="3018" status="FAIL">
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[BUG-04: Genre filter returned non-matching genres: [Horror, Animation, Thriller, Science Fiction, Adventure, Science Fiction, Thriller, History, Science Fiction, Comedy, Thriller]]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: BUG-04: Genre filter returned non-matching genres: [Horror, Animation, Thriller, Science Fiction, Adventure, Science Fiction, Thriller, History, Science Fiction, Comedy, Thriller]
+at org.testng.Assert.fail(Assert.java:111)
+at com.rapyuta.qa.tests.FilterTests.filterByGenre(FilterTests.java:145)
+at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+at org.testng.TestRunner.privateRun(TestRunner.java:739)
+at org.testng.TestRunner.run(TestRunner.java:614)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+at org.testng.TestNG.runSuites(TestNG.java:1112)
+at org.testng.TestNG.run(TestNG.java:1079)
+at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
+at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- filterByGenre -->
+        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:21 IST" name="tearDown" finished-at="2026-05-26T13:36:21 IST" duration-ms="375" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=filterByGenre status=FAILURE method=FilterTests.filterByGenre()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:21 IST" name="setUp" finished-at="2026-05-26T13:36:23 IST" duration-ms="1477" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="filterByType()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:23 IST" name="filterByType" description="TC-F3: Verify filtering by Type (Movie / TV Show) returns non-empty results." finished-at="2026-05-26T13:36:31 IST" duration-ms="8522" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- filterByType -->
+        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:31 IST" name="tearDown" finished-at="2026-05-26T13:36:31 IST" duration-ms="228" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=filterByType status=SUCCESS method=FilterTests.filterByType()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:31 IST" name="setUp" finished-at="2026-05-26T13:36:33 IST" duration-ms="1567" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="filterByYearRange()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:33 IST" name="filterByYearRange" description="TC-F4: Verify year range filter. BUG-03 — includes out-of-range results." finished-at="2026-05-26T13:36:38 IST" duration-ms="4723" status="FAIL">
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[BUG-03: Year filter includes out-of-range results: [2018, 2011, 1997, 1998, 2010, 2005, 2015, 2017, 2015]]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: BUG-03: Year filter includes out-of-range results: [2018, 2011, 1997, 1998, 2010, 2005, 2015, 2017, 2015]
+at org.testng.Assert.fail(Assert.java:111)
+at com.rapyuta.qa.tests.FilterTests.filterByYearRange(FilterTests.java:99)
+at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+at org.testng.TestRunner.privateRun(TestRunner.java:739)
+at org.testng.TestRunner.run(TestRunner.java:614)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+at org.testng.TestNG.runSuites(TestNG.java:1112)
+at org.testng.TestNG.run(TestNG.java:1079)
+at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
+at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- filterByYearRange -->
+        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:38 IST" name="tearDown" finished-at="2026-05-26T13:36:38 IST" duration-ms="898" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=filterByYearRange status=FAILURE method=FilterTests.filterByYearRange()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:38 IST" name="setUp" finished-at="2026-05-26T13:36:41 IST" duration-ms="2088" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="popularCategoryLoads()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:41 IST" name="popularCategoryLoads" description="TC-F1: Verify the default &#039;Popular&#039; category loads with visible results on page load." finished-at="2026-05-26T13:36:42 IST" duration-ms="1549" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- popularCategoryLoads -->
+        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:42 IST" name="tearDown" finished-at="2026-05-26T13:36:43 IST" duration-ms="493" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=popularCategoryLoads status=SUCCESS method=FilterTests.popularCategoryLoads()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:43 IST" name="setUp" finished-at="2026-05-26T13:36:44 IST" duration-ms="1622" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="switchCategories()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:44 IST" name="switchCategories" description="TC-F2: Verify switching between Trending, Newest, and Top Rated categories returns unique results." finished-at="2026-05-26T13:36:49 IST" duration-ms="4682" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- switchCategories -->
+        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:36:49 IST" name="tearDown" finished-at="2026-05-26T13:36:49 IST" duration-ms="317" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=switchCategories status=SUCCESS method=FilterTests.switchCategories()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="afterSuite()[pri:0, instance:com.rapyuta.qa.tests.FilterTests@385c9627]" started-at="2026-05-26T13:37:13 IST" name="afterSuite" finished-at="2026-05-26T13:37:13 IST" duration-ms="410" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterSuite -->
+      </class> <!-- com.rapyuta.qa.tests.FilterTests -->
+      <class name="com.rapyuta.qa.tests.PaginationTests">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@3eb738bb]" started-at="2026-05-26T13:36:49 IST" name="setUp" finished-at="2026-05-26T13:36:51 IST" duration-ms="1490" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="lastPageEdge()[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@3eb738bb]" started-at="2026-05-26T13:36:51 IST" name="lastPageEdge" description="TC-P2: Verify last page edge case. BUG-02 — error shown on last pages." finished-at="2026-05-26T13:37:06 IST" duration-ms="14751" status="FAIL">
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[BUG-02: Last page returns error instead of results.]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: BUG-02: Last page returns error instead of results.
+at org.testng.Assert.fail(Assert.java:111)
+at com.rapyuta.qa.tests.PaginationTests.lastPageEdge(PaginationTests.java:143)
+at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+at org.testng.TestRunner.privateRun(TestRunner.java:739)
+at org.testng.TestRunner.run(TestRunner.java:614)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+at org.testng.TestNG.runSuites(TestNG.java:1112)
+at org.testng.TestNG.run(TestNG.java:1079)
+at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
+at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- lastPageEdge -->
+        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@3eb738bb]" started-at="2026-05-26T13:37:06 IST" name="tearDown" finished-at="2026-05-26T13:37:06 IST" duration-ms="454" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=lastPageEdge status=FAILURE method=PaginationTests.lastPageEdge()[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@3eb738bb] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@3eb738bb]" started-at="2026-05-26T13:37:06 IST" name="setUp" finished-at="2026-05-26T13:37:07 IST" duration-ms="1486" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="nextPrevPagination()[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@3eb738bb]" started-at="2026-05-26T13:37:07 IST" name="nextPrevPagination" finished-at="2026-05-26T13:37:12 IST" duration-ms="4368" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- nextPrevPagination -->
+        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@3eb738bb]" started-at="2026-05-26T13:37:12 IST" name="tearDown" finished-at="2026-05-26T13:37:13 IST" duration-ms="869" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=nextPrevPagination status=SUCCESS method=PaginationTests.nextPrevPagination()[pri:0, instance:com.rapyuta.qa.tests.PaginationTests@3eb738bb] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- com.rapyuta.qa.tests.PaginationTests -->
+    </test> <!-- UI Tests -->
+  </suite> <!-- TMDB Regression Suite -->
+</testng-results>

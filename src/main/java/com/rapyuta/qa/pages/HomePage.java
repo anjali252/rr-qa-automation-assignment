@@ -7,303 +7,368 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+/**
+ * HomePage — Page Object Model for https://tmdb-discover.surge.sh/
+ */
 public class HomePage {
-    private WebDriver driver;
+
+    private final WebDriver driver;
     private static final Logger log = Logger.getLogger(HomePage.class.getName());
-    private String url = "https://tmdb-discover.surge.sh/";
+    private final String BASE_URL = "https://tmdb-discover.surge.sh/";
 
-    private By categoryLinks = By.xpath("//nav//li"); // categories at top
-    private By resultTitles = By.cssSelector("p.text-blue-500.font-bold"); // card selector
-    private By nextButton = By.cssSelector("a[aria-label='Next page']"); 
-    private By prevButton = By.cssSelector("a[aria-label='Previous page']");
-    
- // Filter locators
-    private By titleSearchInput = By.cssSelector("input[name='search']");
+    // --- Locators ---
+    private final By resultTitles    = By.cssSelector("p.text-blue-500.font-bold");
+    private final By nextButton      = By.cssSelector("a[aria-label='Next page']");
+    private final By prevButton      = By.cssSelector("a[aria-label='Previous page']");
+    private final By titleSearchInput = By.cssSelector("input[name='search']");
+    private final By typeSelectInput  = By.id("react-select-2-input");
+    private final By genreSelectInput = By.id("react-select-3-input");
+    private final By yearFromInput    = By.id("react-select-4-input");
+    private final By yearToInput      = By.id("react-select-5-input");
+    private final By cardSubtitle     = By.cssSelector("p.text-gray-400, p.text-sm, .card-subtitle");
+    private final By errorMessage     = By.xpath("//*[contains(text(),'Something went wrong')]");
 
-    // React Select containers (by order of appearance)
-    private By typeSelectInput     = By.id("react-select-2-input");
-    private By genreSelectInput    = By.id("react-select-3-input");
-    private By yearFromSelectInput = By.id("react-select-4-input");
-    private By yearToSelectInput   = By.id("react-select-5-input");
-
-    // Rating stars
-    private By ratingStars = By.cssSelector("li.rc-rate-star");
-    
-    private By cardSubtitle = By.cssSelector("p.text-gray-400, p.text-sm, .card-subtitle");
-    
-    private By errorMessage = By.xpath("//*[contains(text(),'Something went wrong')]");
-    
-    public boolean isErrorDisplayed() {
-        return !driver.findElements(errorMessage).isEmpty();
-    }
-    
-    public HomePage(WebDriver d) { this.driver = d; }
-    public void open() { log.info("Navigating to URL: " + url);
-    driver.get(url); 
-    log.info("Page opened successfully: " + driver.getCurrentUrl());
+    public HomePage(WebDriver driver) {
+        this.driver = driver;
     }
 
+    // -------------------------------------------------------------------------
+    // Navigation
+    // -------------------------------------------------------------------------
+
+    /**
+     * navigate to base URL and wait for the first result card to appear.
+     * Prevents tests from racing ahead before React renders data.
+     */
+    public void open() {
+        log.info("Navigating to: " + BASE_URL);
+        driver.get(BASE_URL);
+        new WebDriverWait(driver, Duration.ofSeconds(15))
+                .until(ExpectedConditions.visibilityOfElementLocated(resultTitles));
+        log.info("Home page ready — results visible.");
+    }
+
+    /**
+     * use contains(normalize-space(.), 'name') so that:
+     *   - "Trend" matches the rendered text "Trending"
+     *   - Leading/trailing whitespace in text nodes is ignored
+     *   - "Top Rated", "Newest", "Popular" all continue to work
+     *
+     * after clicking, wait for the result list to go stale (old cards
+     *        removed) and then for new cards to appear, so the caller always
+     *        reads fresh results.
+     */
     public void clickCategory(String name) {
-    	log.info("Attempting to click category: " + name);
-    	By categoryLocator = By.xpath("//nav//li[text()='" + name + "']");
-    	log.info("Clicking category link: " + driver.findElement(categoryLocator).getText());
-    	driver.findElement(categoryLocator).click();
-    }
+        log.info("Clicking category: " + name);
 
-    public List<String> getResultTitles() {
-    	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        List<String> titles = new ArrayList<>();
-        int retry = 0;
-        log.info("Fetching result titles from page...");
-        while (retry < 3) {
-            try {
-            	List<WebElement> elements =wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(resultTitles));
-            	titles = elements.stream()
-                        .map(WebElement::getText)
-                        .map(String::trim)
-                        .filter(t -> !t.isEmpty())
-                        .collect(Collectors.toList());
-                if (!titles.isEmpty()) {log.info("Successfully fetched " + titles.size() + " titles.");
-                break; // success
-                }
-            } catch (StaleElementReferenceException ignored) {
-                log.warning("Retrying getResultTitles(), attempt " + (retry + 1));
-            }
-            retry++;
-            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
-        }
-        return titles;
-    }
+        // contains + normalize-space instead of exact text()='...'
+        By locator = By.xpath(
+                "//nav//li[contains(normalize-space(.), '" + name + "')]");
 
-    
-    public void waitForResultsToChange(String oldFirstTitle) {
-        log.info("Waiting for results to change from: " + oldFirstTitle);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20)); // increase timeout
-        wait.until(d -> {
-            List<String> titles = driver.findElements(resultTitles)
-                    .stream()
-                    .map(e -> e.getText().trim())
-                    .filter(t -> !t.isEmpty())
-                    .collect(Collectors.toList());
-            return !titles.isEmpty() && !titles.get(0).equals(oldFirstTitle);
-        });
-        log.info("Results changed successfully.");
-    }
-
-    public int getResultCount() {
-    	int count = driver.findElements(resultTitles).size();
-    	log.info("Number of result cards on current page: " + count);
-        return count;
-    }
-
-    public void clickNext() { log.info("Clicking 'Next' button...");
-    driver.findElement(nextButton).click(); }
-
-    public void clickPrev() { 
-    	log.info("Clicking 'Previous' button...");
-    	driver.findElement(prevButton).click(); 
-    	}
-
-    public List<String> getResultTypes() {
-        log.info("Extracting result type labels...");
-        By typeLabel = By.cssSelector(".card .type, .badge, span.media-type");
-        return driver.findElements(typeLabel).stream()
-                .map(WebElement::getText)
-                .map(String::trim)
-                .filter(t -> !t.isEmpty())
-                .collect(Collectors.toList());
-    }
-    
-    public void selectReactDropdown(By inputLocator, String value) {
-        log.info("Selecting React dropdown value: " + value);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement categoryEl = wait.until(ExpectedConditions.elementToBeClickable(locator));
+        log.info("Found category element: '" + categoryEl.getText().trim() + "'");
+        categoryEl.click();
 
-        // Step 1: Get the input element
-        WebElement input = driver.findElement(inputLocator);
-
-        // Step 2: Click the parent control div to open the dropdown
-        // React Select input is nested inside the control — go up to the control
-        WebElement control = (WebElement) ((org.openqa.selenium.JavascriptExecutor) driver)
-            .executeScript("return arguments[0].closest('[class*=\"control\"]')", input);
-        control.click();
-        log.info("Opened React dropdown for: " + value);
-
-        // Step 3: Type to filter options
-        input.sendKeys(value);
-
-        // Step 4: Wait for matching option and click it
-        WebElement option = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.xpath("//*[contains(@class,'option') and normalize-space(text())='" + value + "']")));
-        option.click();
-        log.info("Selected React dropdown option: " + value);
+        // wait for stale + re-render so results belong to the clicked category
+        waitForResultsToReload();
+        log.info("Category '" + name + "' loaded.");
     }
+
+    // -------------------------------------------------------------------------
+    // Filters
+    // -------------------------------------------------------------------------
 
     public void selectType(String type) {
         log.info("Selecting type filter: " + type);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        WebElement input = driver.findElement(typeSelectInput);
-        WebElement control = (WebElement) ((org.openqa.selenium.JavascriptExecutor) driver)
-            .executeScript("return arguments[0].closest('[class*=\"control\"]')", input);
+        WebElement input   = driver.findElement(typeSelectInput);
+        WebElement control = getReactSelectControl(input);
         control.click();
 
-        // Use contains() instead of exact match to handle variations
         WebElement option = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.xpath("//*[contains(@class,'option') and contains(text(),'" + type + "')]")));
+                By.xpath("//*[contains(@class,'option') and contains(normalize-space(text()),'"
+                        + type + "')]")));
         option.click();
-        log.info("Type selected: " + type);
+
+        waitForResultsToReload();
+        log.info("Type filter set: " + type);
     }
 
+    public void selectGenre(String genre) {
+        log.info("Selecting genre filter: " + genre);
+        selectReactDropdown(genreSelectInput, genre);
+        waitForResultsToReload();
+    }
+
+    public void setYearRange(String from, String to) {
+        log.info("Setting year range: " + from + " → " + to);
+        selectReactDropdownByScroll(yearFromInput, from);
+        log.info("Year From set: " + from);
+        selectReactDropdownByScroll(yearToInput, to);
+        log.info("Year To set: " + to);
+        waitForResultsToReload();
+    }
+
+    /**
+     * Clicks the Nth star (1–5) in the rc-rate component.
+     */
+    public void setRating(int stars) {
+        if (stars < 1 || stars > 5) {
+            throw new IllegalArgumentException("Rating must be between 1 and 5, got: " + stars);
+        }
+     
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.presenceOfElementLocated(
+                        By.cssSelector("ul.rc-rate")));
+     
+        By starLocator = By.cssSelector(
+                "ul.rc-rate li div[aria-posinset='" + stars + "'] .rc-rate-star-second");
+     
+        WebElement star = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.presenceOfElementLocated(starLocator));
+     
+        // Scroll the star into the centre of the viewport to minimise overlap risk
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block:'center', inline:'center'});", star);
+     
+        // JS click bypasses the intercepting overlay element
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", star);
+     
+        log.info("Rating set to " + stars + " star(s).");
+        waitForResultsToReload();
+    }
+
+    /**
+     * robust search — waits for input, clears, types, then waits for
+     * the result list to actually change rather than relying on Thread.sleep.
+     */
     public void searchByTitle(String title) {
         log.info("Searching for title: " + title);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
         WebElement searchBox = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(titleSearchInput));
+                ExpectedConditions.elementToBeClickable(titleSearchInput));
         searchBox.clear();
         searchBox.sendKeys(title);
-        // Search triggers on input — no Enter/button needed
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-            .until(ExpectedConditions.stalenessOf(
-                driver.findElements(resultTitles).isEmpty() ? searchBox
-                    : driver.findElements(resultTitles).get(0)));
-        log.info("Title search submitted: " + title);
-    }
-    
-    public void selectGenre(String genre) {
-        log.info("Selecting genre: " + genre);
-        selectReactDropdown(genreSelectInput, genre);
+
+        // wait for result list to refresh — either stale cards disappear or count changes
+        waitForResultsToReload();
+        log.info("Search submitted: " + title);
     }
 
-    public void setRating(int stars) {
-        log.info("Setting rating filter: " + stars + " stars and above");
+    // -------------------------------------------------------------------------
+    // Pagination
+    // -------------------------------------------------------------------------
+
+    public void clickNext() {
+        log.info("Clicking Next page...");
+        driver.findElement(nextButton).click();
+    }
+
+    public void clickPrev() {
+        log.info("Clicking Previous page...");
+        driver.findElement(prevButton).click();
+    }
+
+    public void clickLastVisiblePage() {
+        log.info("Locating last visible page number...");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        // Wait for all star elements to be present
-        List<WebElement> starDivs = wait.until(
-            ExpectedConditions.presenceOfAllElementsLocatedBy(
-                By.cssSelector("li.rc-rate-star div[role='radio']")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector("ul li a[aria-label*='Page']")));
 
-        if (stars >= 1 && stars <= starDivs.size()) {
-            WebElement targetStar = starDivs.get(stars - 1);
+        List<WebElement> pageLinks = driver.findElements(
+                By.cssSelector("ul li a[aria-label*='Page']"));
 
-            // Use JavaScript click to bypass element interception
-            ((org.openqa.selenium.JavascriptExecutor) driver)
-                .executeScript("arguments[0].click();", targetStar);
-
-            log.info("Rating set to: " + stars + " stars and above via JS click");
-        } else {
-            log.warning("Invalid star count: " + stars);
+        if (pageLinks.isEmpty()) {
+            log.warning("No page links found — pagination may not be rendered.");
+            return;
         }
+
+        WebElement lastPage = pageLinks.get(pageLinks.size() - 1);
+        String ariaLabel = lastPage.getAttribute("aria-label");
+        log.info("Clicking last visible page: " + ariaLabel);
+
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView(true);", lastPage);
+        lastPage.click();
+        log.info("Last page clicked: " + ariaLabel);
     }
-    
+
+    public void waitForResultsToChange(String oldFirstTitle) {
+        log.info("Waiting for results to change from: '" + oldFirstTitle + "'");
+        new WebDriverWait(driver, Duration.ofSeconds(20))
+                .until(d -> {
+                    List<String> titles = d.findElements(resultTitles)
+                            .stream()
+                            .map(e -> e.getText().trim())
+                            .filter(t -> !t.isEmpty())
+                            .collect(Collectors.toList());
+                    return !titles.isEmpty() && !titles.get(0).equals(oldFirstTitle);
+                });
+        log.info("Results changed successfully.");
+    }
+
+    // -------------------------------------------------------------------------
+    // Data extraction
+    // -------------------------------------------------------------------------
+
+    public int getResultCount() {
+        int count = driver.findElements(resultTitles).size();
+        log.info("Result count: " + count);
+        return count;
+    }
+
+    public List<String> getResultTitles() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        List<String> titles = new ArrayList<>();
+        int attempt = 0;
+        while (attempt < 3) {
+            try {
+                List<WebElement> elements = wait.until(
+                        ExpectedConditions.visibilityOfAllElementsLocatedBy(resultTitles));
+                titles = elements.stream()
+                        .map(WebElement::getText)
+                        .map(String::trim)
+                        .filter(t -> !t.isEmpty())
+                        .collect(Collectors.toList());
+                if (!titles.isEmpty()) {
+                    log.info("Fetched " + titles.size() + " result titles.");
+                    break;
+                }
+            } catch (StaleElementReferenceException e) {
+                log.warning("Stale element on getResultTitles() attempt " + (attempt + 1));
+            }
+            attempt++;
+            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+        }
+        return titles;
+    }
+
     public List<String> getResultGenres() {
-        log.info("Extracting genre labels from result cards...");
+        log.info("Extracting genre labels from cards...");
         try {
-            List<WebElement> subtitles = driver.findElements(cardSubtitle);
-            return subtitles.stream()
-                .map(WebElement::getText)
-                .map(String::trim)
-                .filter(t -> t.contains(","))
-                .map(t -> t.split(",")[0].trim()) // "Action, 2022" → "Action"
-                .collect(Collectors.toList());
+            return driver.findElements(cardSubtitle).stream()
+                    .map(WebElement::getText)
+                    .map(String::trim)
+                    .filter(t -> t.contains(","))
+                    .map(t -> t.split(",")[0].trim())
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             log.warning("Could not extract genres: " + e.getMessage());
-            return new java.util.ArrayList<>();
+            return new ArrayList<>();
         }
     }
-    
-    public void setYearRange(String from, String to) {
-        log.info("Setting year range: " + from + " to " + to);
-        selectReactDropdownByScroll(yearFromSelectInput, from);
-        log.info("Year From set to: " + from);
-        selectReactDropdownByScroll(yearToSelectInput, to);
-        log.info("Year To set to: " + to);
-    }
 
-    private void selectReactDropdownByScroll(By inputLocator, String value) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        // Open the dropdown by clicking the control
-        WebElement input = driver.findElement(inputLocator);
-        WebElement control = (WebElement) ((org.openqa.selenium.JavascriptExecutor) driver)
-            .executeScript("return arguments[0].closest('[class*=\"control\"]')", input);
-        control.click();
-
-        // Type the value to jump to it in the list
-        input.sendKeys(value);
-
-        // Wait for option to appear and click — use contains for safety
-        WebElement option = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.xpath("//div[contains(@class,'option') and normalize-space(text())='" + value + "']")));
-        option.click();
-        log.info("Dropdown option selected: " + value);
-    }
-    
-    public boolean isPageError() {
-        List<By> errorLocators = List.of(
-            By.xpath("//*[contains(text(),'Page Not Found')]"),
-            By.xpath("//*[contains(text(),'404')]"),
-            By.xpath("//*[contains(text(),'Something went wrong')]"),
-            By.xpath("//*[contains(text(),'Cannot GET')]"),
-            By.xpath("//*[contains(text(),'powered by')]") // ← Surge.sh 404 page footer
-        );
-        return errorLocators.stream()
-            .anyMatch(loc -> !driver.findElements(loc).isEmpty());
-    }
-    
     public List<String> getResultYears() {
-        log.info("Extracting release years from result cards...");
+        log.info("Extracting release years from cards...");
         try {
-            List<WebElement> subtitles = driver.findElements(cardSubtitle);
-            return subtitles.stream()
-                .map(WebElement::getText)
-                .map(String::trim)
-                .filter(t -> t.contains(","))
-                .map(t -> {
-                    String[] parts = t.split(",");
-                    return parts.length > 1 ? parts[parts.length - 1].trim() : "";
-                })
-                .filter(y -> y.matches("\\d{4}")) // only valid 4-digit years
-                .collect(Collectors.toList());
+            return driver.findElements(cardSubtitle).stream()
+                    .map(WebElement::getText)
+                    .map(String::trim)
+                    .filter(t -> t.contains(","))
+                    .map(t -> {
+                        String[] parts = t.split(",");
+                        return parts.length > 1 ? parts[parts.length - 1].trim() : "";
+                    })
+                    .filter(y -> y.matches("\\d{4}"))
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             log.warning("Could not extract years: " + e.getMessage());
             return new ArrayList<>();
         }
     }
-    
-    public void clickLastVisiblePage() {
-        log.info("Finding last visible page number in pagination...");
+
+    // -------------------------------------------------------------------------
+    // State checks
+    // -------------------------------------------------------------------------
+
+    public boolean isErrorDisplayed() {
+        return !driver.findElements(errorMessage).isEmpty();
+    }
+
+    public boolean isPageError() {
+        List<By> errorLocators = List.of(
+                By.xpath("//*[contains(text(),'Page Not Found')]"),
+                By.xpath("//*[contains(text(),'404')]"),
+                By.xpath("//*[contains(text(),'Something went wrong')]"),
+                By.xpath("//*[contains(text(),'Cannot GET')]"),
+                By.xpath("//*[contains(text(),'powered by')]")
+        );
+        return errorLocators.stream()
+                .anyMatch(loc -> !driver.findElements(loc).isEmpty());
+    }
+
+    // -------------------------------------------------------------------------
+    // Private helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Shared React Select interaction: open control → type value → click option.
+     */
+    private void selectReactDropdown(By inputLocator, String value) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement input   = driver.findElement(inputLocator);
+        WebElement control = getReactSelectControl(input);
+        control.click();
+        input.sendKeys(value);
+        WebElement option = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(@class,'option') and normalize-space(text())='" + value + "']")));
+        option.click();
+        log.info("React dropdown selected: " + value);
+    }
 
-        // Wait for pagination to load
-        wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("ul li a[aria-label*='Page']")));
+    /**
+     * React Select year dropdowns use a scrollable list rather than type-ahead,
+     * so we open → type to jump → click the exact match.
+     */
+    private void selectReactDropdownByScroll(By inputLocator, String value) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement input   = driver.findElement(inputLocator);
+        WebElement control = getReactSelectControl(input);
+        control.click();
+        input.sendKeys(value);
+        WebElement option = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[contains(@class,'option') and normalize-space(text())='" + value + "']")));
+        option.click();
+        log.info("Year dropdown selected: " + value);
+    }
 
-        // Get all page number links using aria-label pattern
-        List<WebElement> pageLinks = driver.findElements(
-            By.cssSelector("ul li a[aria-label*='Page']"));
+    /**
+     * Navigate up from the hidden React Select input to its visible control div.
+     */
+    private WebElement getReactSelectControl(WebElement input) {
+        return (WebElement) ((JavascriptExecutor) driver)
+                .executeScript("return arguments[0].closest('[class*=\"control\"]')", input);
+    }
 
-        if (pageLinks.isEmpty()) {
-            log.warning("No page links found with aria-label pattern.");
-            return;
+    /**
+     * Wait for the current result cards to go stale (DOM update) and then for
+     * new cards to appear. Used after every action that triggers a data reload.
+     * Falls back gracefully if no cards were present before the action.
+     */
+    private void waitForResultsToReload() {
+        try {
+            List<WebElement> currentCards = driver.findElements(resultTitles);
+            if (!currentCards.isEmpty()) {
+                // Wait for the first card to go stale (React re-renders the list)
+                new WebDriverWait(driver, Duration.ofSeconds(10))
+                        .until(ExpectedConditions.stalenessOf(currentCards.get(0)));
+            }
+            // Then wait for fresh cards to appear
+            new WebDriverWait(driver, Duration.ofSeconds(10))
+                    .until(ExpectedConditions.visibilityOfElementLocated(resultTitles));
+        } catch (Exception e) {
+            log.warning("waitForResultsToReload timeout — proceeding: " + e.getMessage());
         }
-
-        // Last element in the list is the highest page number
-        WebElement lastPage = pageLinks.get(pageLinks.size() - 1);
-        String pageNum = lastPage.getAttribute("aria-label");
-        log.info("Clicking last visible page: " + pageNum);
-
-        // Scroll into view then click
-        ((org.openqa.selenium.JavascriptExecutor) driver)
-            .executeScript("arguments[0].scrollIntoView(true);", lastPage);
-        lastPage.click();
-
-        log.info("Clicked last page: " + pageNum);
     }
 }

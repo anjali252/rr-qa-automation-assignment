@@ -112,7 +112,6 @@ Known broken behaviour is deliberately tested to document defects:
 - Last page pagination on Popular (57,034 pages) (BUG-02)
 - Year range filter returning out-of-range results (BUG-03)
 - Genre filter returning mixed-genre results (BUG-04)
-- Rating filter has no effect — results are identical regardless of star rating selected (BUG-05)
 
 **3. Browser API Call Assertions (CDP)**
 Selenium 4's Chrome DevTools Protocol (CDP) is used to intercept and assert browser-level network calls triggered by UI interactions. Performance logs capture API requests made to the TMDB backend when filters are applied and pagination is navigated.
@@ -127,10 +126,10 @@ Selenium 4's Chrome DevTools Protocol (CDP) is used to intercept and assert brow
 |---|---|---|---|---|
 | TC-F1 | Popular category loads | Positive | 20 results on page load | — |
 | TC-F2 | Switch categories | Positive | Each category returns valid, non-empty results | — |
-| TC-F3 | Filter by Type (Movie / TV) | Positive | Results match selected type | — |
+| TC-F3 | Filter by Type (Movie / TV) | Positive | Results are non-empty for Movie and TV selections | — |
 | TC-F4 | Filter by Year range | Negative | Results within selected range — BUG-03 causes failure | BUG-03 |
-| TC-F5 | Filter by Rating | Negative | Results filtered by minimum star rating — BUG-05 causes failure | BUG-05 |
-| TC-F6 | Search by keyword | Positive | Results are relevant to the entered search term | — |
+| TC-F5 | Search by keyword | Positive | Results are relevant to the entered search term | — |
+| TC-F6 | Filter by Rating | Positive | Stricter rating threshold returns fewer results | — |
 | TC-F7 | Filter by Genre | Negative | Results match selected genre — BUG-04 causes failure | BUG-04 |
 | TC-F8 | Direct URL navigation | Negative | App should load — BUG-01 causes 404 | BUG-01 |
 
@@ -145,8 +144,8 @@ Selenium 4's Chrome DevTools Protocol (CDP) is used to intercept and assert brow
 
 ## Test Design Techniques
 
-- **Equivalence Partitioning** — Valid and invalid input classes for filters (e.g. Year 2019–2021 as valid, Year 1800 as invalid; Rating ≥ 7 as a valid partition; search term with known results vs. gibberish input)
-- **Boundary Value Analysis** — Testing first and last pages of pagination; year range boundaries; minimum and maximum star rating values
+- **Equivalence Partitioning** — Valid and invalid input classes for filters (e.g. Year 2019–2021 as valid, Year 1800 as invalid; rating 1 vs 5 as boundary classes; search term with known results vs. gibberish input)
+- **Boundary Value Analysis** — Testing first and last pages of pagination; year range boundaries; minimum and maximum star rating values (1 and 5)
 - **State Transition Testing** — Category switching verifies the app transitions correctly between states (Popular → Trend → Newest → Top Rated)
 - **Error Guessing** — Direct URL access, last page navigation, and filter combinations targeted based on common SPA (React) failure points
 
@@ -168,13 +167,6 @@ Selenium 4's Chrome DevTools Protocol is used to monitor browser-level network a
 - `DriverFactory` enables Chrome performance logging via `ChromeOptions`
 - During pagination tests, network requests triggered by clicking Next/Previous are captured from the browser performance log
 - Captured network events (URLs, status codes) are written to `reports/networkLogs/` for traceability
-- Assertions verify that paginating triggers the correct API calls to the TMDB backend
-
-```java
-// Performance log capture in BaseTest / PaginationTests
-LogEntries logs = driver.manage().logs().get("browser");
-// Network events filtered and written via LogFileUtil
-```
 
 > Note: Full CDP DevTools API (v142) was tested but commented out due to Chrome version dependency. The performance log approach is version-agnostic and works across Chrome versions.
 
@@ -185,7 +177,7 @@ LogEntries logs = driver.manage().logs().get("browser");
 Java Util Logging (JUL) is used throughout:
 
 - Every page action logs an `INFO` entry before and after execution
-- Warnings are logged for non-critical issues (e.g. empty result sets, optional assertions skipped)
+- Warnings are logged for non-critical issues (e.g. known app bugs detected)
 - Severe errors are logged on unexpected exceptions
 - Logs appear in the **console** during execution and are also attached to the **ExtentReports HTML report** as test step details
 
@@ -196,9 +188,9 @@ Java Util Logging (JUL) is used throughout:
 ExtentReports generates a self-contained HTML report at `target/extent-report.html`.
 
 The report includes:
-- Pass / Fail / Warning status per test
+- Pass / Fail / Warning / Skip status per test
 - Step-by-step logs with timestamps
-- **Screenshots automatically attached on test failure**
+- Screenshots automatically attached on test failure
 - Browser console log output captured per test
 - Network log file paths for traceability
 
@@ -269,7 +261,6 @@ jobs:
 | Bug ID | Title | Steps to Reproduce | Expected | Actual | Severity | Status |
 |---|---|---|---|---|---|---|
 | BUG-01 | Direct URL `/popular` and `/top` shows 404 | Navigate directly to `https://tmdb-discover.surge.sh/popular` | App loads with results | Surge.sh "Page Not Found" displayed | High | Open |
-| BUG-02 | Last page pagination shows error | Go to Popular → click last page number (57034) | Results load normally | "Something went wrong! Please try again later." displayed | High | Open |
+| BUG-02 | Last page pagination shows error | Go to Popular → click last page number (57,034) | Results load normally | "Something went wrong! Please try again later." displayed | High | Open |
 | BUG-03 | Year filter returns out-of-range results | Set Year filter to 2019–2021 → observe results | All results within 2019–2021 | Results from other years included | Medium | Open |
 | BUG-04 | Genre filter returns mixed genres | Select Genre = Action → observe result genres | All results are Action | Results include Horror, Thriller, Animation etc. | Medium | Open |
-| BUG-05 | Rating filter has no effect | Select any star rating → compare results to unfiltered state | Results are filtered by minimum rating | Results are identical regardless of rating selected | Medium | Open |

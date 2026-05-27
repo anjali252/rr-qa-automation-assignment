@@ -1,305 +1,325 @@
 package com.rapyuta.qa.tests;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.rapyuta.qa.pages.HomePage;
 
+/**
+ * FilterTests — TC-F1 through TC-F8.
+ *  */
 public class FilterTests extends BaseTest {
 
-	private static final Logger log = Logger.getLogger(FilterTests.class.getName());
+    private static final Logger log = Logger.getLogger(FilterTests.class.getName());
 
-	@Test(description = "TC-F1: Verify the default 'Popular' category loads with visible results on page load.")
-	public void popularCategoryLoads() {
-		startTest("TC-F1 - Popular Category Loads");
-		HomePage home = new HomePage(driver);
-		home.open();
-		test.info("Opened home page");
-		log.info("Verifying Popular category loads with results...");
-		int count = home.getResultCount();
-		test.info("Result count: " + count);
-		Assert.assertTrue(count > 0, "Expected some results in Popular category");
-	}
+    // -------------------------------------------------------------------------
+    // TC-F1
+    // -------------------------------------------------------------------------
 
-	@Test(description = "TC-F2: Verify switching between Trending, Newest, and Top Rated categories returns unique results.")
-	public void switchCategories() {
-		startTest("TC-F2 - Switch Categories");
-		HomePage home = new HomePage(driver);
-		home.open();
-		String[] cats = new String[] { "Trend", "Newest", "Top Rated" };
-		for (String c : cats) {
-			home.clickCategory(c);
-			test.info("Clicked category: " + c);
-			List<String> titles = home.getResultTitles();
-			Assert.assertFalse(titles.isEmpty(), "Category '" + c + "' should return results");
-			Assert.assertTrue(titles.stream().allMatch(t -> t.length() > 2),
-					"Each title in '" + c + "' should have valid text");
-			test.info(c + " returned " + titles.size() + " results.");
-		}
-	}
+    @Test(description = "TC-F1: Verify the default 'Popular' category loads with visible results on page load.")
+    public void popularCategoryLoads() {
+        startTest("TC-F1 - Popular Category Loads");
+        HomePage home = new HomePage(driver);
+        home.open();
+        test.info("Opened home page.");
 
-	@Test(description = "TC-F3: Verify filtering by Type (Movie / TV Show) returns non-empty results.")
-	public void filterByType() {
-	    startTest("TC-F3 - Filter by Type");
-	    HomePage home = new HomePage(driver);
-	    home.open();
+        int count = home.getResultCount();
+        test.info("Result count on load: " + count);
 
-	    // Exact text values shown in the React Select dropdown
-	    String[] types = {"Movie", "TV"};
-	    for (String type : types) {
-	        home.open(); // reset page before each filter
-	        log.info("Applying type filter: " + type);
-	        home.selectType(type);
-	        test.info("Selected type: " + type);
+        Assert.assertTrue(count > 0,
+                "Expected results in Popular category on page load, found: " + count);
+        test.pass("Popular category loaded with " + count + " results.");
+    }
 
-	        List<String> titles = home.getResultTitles();
-	        test.info(type + " returned " + titles.size() + " results.");
-	        Assert.assertFalse(titles.isEmpty(),
-	            "Expected results when filtering by type: " + type);
-	        test.pass("Type filter '" + type + "' returned " + titles.size() + " results.");
-	    }
-	}
+    // -------------------------------------------------------------------------
+    // TC-F2
+    // -------------------------------------------------------------------------
 
-	@Test(description = "TC-F4: Verify year range filter. BUG-03 — includes out-of-range results.")
-	public void filterByYearRange() {
-	    startTest("TC-F4 - Filter by Year Range");
-	    try {
-	        test.info("Opening home page...");
-	        HomePage home = new HomePage(driver);
-	        home.open();
-	        test.info("Home page opened successfully.");
+    @Test(description = "TC-F2: Verify switching between Trending, Newest, and Top Rated returns valid results.")
+    public void switchCategories() {
+        startTest("TC-F2 - Switch Categories");
+        HomePage home = new HomePage(driver);
+        home.open();
+        test.info("Home page opened.");
 
-	        String fromYear = "2019";
-	        String toYear   = "2021";
-	        test.info("Applying year range: " + fromYear + " to " + toYear);
-	        home.setYearRange(fromYear, toYear);
-	        test.info("Year range applied.");
+        String[] categories = {"Trend", "Newest", "Top rated"};
 
-	        List<String> titles = home.getResultTitles();
-	        test.info("Results returned: " + titles.size());
-	        Assert.assertFalse(titles.isEmpty(),
-	            "Expected results for year range " + fromYear + " - " + toYear);
+        for (String category : categories) {
+            home.clickCategory(category);
+            test.info("Clicked category: " + category);
 
-	        List<String> years = home.getResultYears();
-	        test.info("Years extracted from cards: " + years);
+            List<String> titles = home.getResultTitles();
+            Assert.assertFalse(titles.isEmpty(),
+                    "Category '" + category + "' should return results.");
+            Assert.assertTrue(titles.stream().allMatch(t -> t.length() > 2),
+                    "All titles in '" + category + "' should have valid text.");
+            test.pass(category + " returned " + titles.size() + " valid results.");
+        }
+    }
 
-	        if (!years.isEmpty()) {
-	            int from = Integer.parseInt(fromYear);
-	            int to   = Integer.parseInt(toYear);
-	            List<String> outOfRange = years.stream()
-	                .filter(y -> !y.isEmpty())
-	                .filter(y -> { int yr = Integer.parseInt(y); return yr < from || yr > to; })
-	                .collect(java.util.stream.Collectors.toList());
+    // -------------------------------------------------------------------------
+    // TC-F3
+    // -------------------------------------------------------------------------
 
-	            if (!outOfRange.isEmpty()) {
-	                test.warning("BUG-03: Out-of-range years detected: " + outOfRange);
-	                Assert.fail("BUG-03: Year filter includes out-of-range results: " + outOfRange);
-	            } else {
-	                test.pass("All results within year range: " + fromYear + " - " + toYear);
-	            }
-	        } else {
-	            test.warning("Year data not extractable — manual verification needed for BUG-03.");
-	        }
-	    } catch (AssertionError ae) {
-	        test.fail("Assertion failed: " + ae.getMessage());
-	        throw ae;
-	    } catch (Exception e) {
-	        test.fail("Unexpected exception: " + e.getMessage());
-	        log.severe("TC-F4 failed with exception: " + e.getMessage());
-	        throw e;
-	    }
-	}
-	
-	@Test(description = "TC-F5: Verify header search by title returns matching results.")
-	public void searchByTitle() {
-	    startTest("TC-F5 - Search by Title");
-	    try {
-	        test.info("Opening home page...");
-	        HomePage home = new HomePage(driver);
-	        home.open();
-	        test.info("Home page opened.");
+    @Test(description = "TC-F3: Verify filtering by Type (Movie / TV) returns non-empty results.")
+    public void filterByType() {
+        startTest("TC-F3 - Filter by Type");
+        String[] types = {"Movie", "TV"};
 
-	        String searchTerm = "Batman";
-	        test.info("Searching for title: " + searchTerm);
+        for (String type : types) {
+            HomePage home = new HomePage(driver);
+            home.open();
+            test.info("Home page opened for type: " + type);
 
-	        // Header search input
-	        WebElement searchBox = new WebDriverWait(driver, Duration.ofSeconds(10))
-	            .until(ExpectedConditions.visibilityOfElementLocated(
-	                By.cssSelector("input[name='search']")));
-	        searchBox.clear();
-	        searchBox.sendKeys(searchTerm);
-	        Thread.sleep(1500); // allow results to filter
+            home.selectType(type);
+            test.info("Selected type: " + type);
 
-	        List<String> titles = home.getResultTitles();
-	        test.info("Results returned: " + titles.size());
+            List<String> titles = home.getResultTitles();
+            test.info(type + " returned " + titles.size() + " results.");
 
-	        Assert.assertFalse(titles.isEmpty(),
-	            "Expected results for title search: " + searchTerm);
+            Assert.assertFalse(titles.isEmpty(),
+                    "Expected results for type filter: " + type);
+            test.pass("Type filter '" + type + "' returned " + titles.size() + " results.");
+        }
+    }
 
-	        boolean anyMatch = titles.stream()
-	            .anyMatch(t -> t.toLowerCase().contains(searchTerm.toLowerCase()));
-	        Assert.assertTrue(anyMatch,
-	            "At least one result should contain: " + searchTerm);
+    // -------------------------------------------------------------------------
+    // TC-F4
+    // -------------------------------------------------------------------------
 
-	        test.pass("Title search returned matching results.");
-	    } catch (AssertionError ae) {
-	        test.fail("Assertion failed: " + ae.getMessage());
-	        throw ae;
-	    } catch (Exception e) {
-	        test.fail("Exception: " + e.getMessage());
-	        throw new RuntimeException(e);
-	    }
-	}
-	
-	@Test(description = "TC-F6: Verify rating filter changes results. BUG-05 — results unchanged regardless of rating selected.")
-	public void filterByRating() {
-	    startTest("TC-F6 - Filter by Rating");
-	    try {
-	        test.info("Opening home page...");
-	        HomePage home = new HomePage(driver);
-	        home.open();
-	        test.info("Home page opened.");
+    @Test(description = "TC-F4: Verify year range filter. BUG-03 — includes out-of-range results.")
+    public void filterByYearRange() {
+        startTest("TC-F4 - Filter by Year Range");
+        try {
+            test.info("Opening home page...");
+            HomePage home = new HomePage(driver);
+            home.open();
+            test.info("Home page ready.");
 
-	        // Get baseline results with no rating filter
-	        List<String> baselineTitles = home.getResultTitles();
-	        test.info("Baseline results (no filter): " + baselineTitles.size());
+            String fromYear = "2019";
+            String toYear   = "2021";
+            test.info("Applying year range: " + fromYear + " to " + toYear);
+            home.setYearRange(fromYear, toYear);
+            test.info("Year range applied.");
 
-	        // Apply 1 star rating
-	        home.setRating(1);
-	        test.info("Rating filter applied: 1 star & up");
-	        Thread.sleep(1500);
-	        List<String> oneStar = home.getResultTitles();
-	        test.info("Results after 1 star: " + oneStar.size());
+            List<String> rawYears = home.getResultYears();
+            test.info("Years on cards: " + rawYears);
 
-	        // Apply 5 star rating
-	        home.setRating(5);
-	        test.info("Rating filter applied: 5 stars & up");
-	        Thread.sleep(1500);
-	        List<String> fiveStar = home.getResultTitles();
-	        test.info("Results after 5 stars: " + fiveStar.size());
+            List<Integer> years = rawYears.stream()
+                    .map(String::trim)
+                    .filter(s -> s.matches("\\d{4}"))
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toList());
 
-	        // Results should differ between 1 star and 5 star
-	        // If identical — rating filter is not working
-	        if (oneStar.equals(fiveStar)) {
-	            takeScreenshot("BUG05_RatingFilter_NoEffect");
-	            test.warning("BUG-05: Rating filter has no effect — " 
-	                + "1 star and 5 star return identical results: " + fiveStar);
-	            Assert.fail("BUG-05: Rating filter does not change results. " 
-	                + "1-star and 5-star filters return identical " 
-	                + fiveStar.size() + " results.");
-	        } else {
-	            test.pass("Rating filter working — different results for different ratings.");
-	        }
+            List<Integer> outOfRange = years.stream()
+                    .filter(y -> y < 2019 || y > 2021)
+                    .collect(Collectors.toList());
 
-	    } catch (AssertionError ae) {
-	        test.fail("Assertion failed: " + ae.getMessage());
-	        throw ae;
-	    } catch (Exception e) {
-	        test.fail("Exception: " + e.getMessage());
-	        throw new RuntimeException(e);
-	    }
-	}
-	
-	@Test(description = "TC-F7: Verify genre filter. BUG-04 — mixed genres returned.")
-	public void filterByGenre() {
-	    startTest("TC-F7 - Filter by Genre");
-	    try {
-	        test.info("Opening home page...");
-	        HomePage home = new HomePage(driver);
-	        home.open();
-	        test.info("Home page opened successfully.");
+            if (!outOfRange.isEmpty()) {
+                test.warning("BUG-03: Out-of-range years detected: " + outOfRange);
+                Assert.fail("BUG-03: Year filter includes out-of-range results: " + outOfRange);
+            } else {
+                test.pass("All " + years.size() + " results are within 2019–2021.");
+            }
+        } catch (AssertionError ae) {
+            test.fail("Assertion failed: " + ae.getMessage());
+            throw ae;
+        } catch (Exception e) {
+            test.fail("Exception: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
 
-	        String genre = "Action";
-	        test.info("Selecting genre: " + genre);
-	        home.selectGenre(genre);
-	        test.info("Genre selected: " + genre);
+    // -------------------------------------------------------------------------
+    // TC-F5
+    // -------------------------------------------------------------------------
 
-	        List<String> titles = home.getResultTitles();
-	        test.info("Results returned: " + titles.size());
-	        Assert.assertFalse(titles.isEmpty(),
-	            "Expected results when filtering by genre: " + genre);
+    @Test(description = "TC-F5: Verify title search returns matching results.")
+    public void searchByTitle() {
+        startTest("TC-F5 - Search by Title");
+        try {
+            test.info("Opening home page...");
+            HomePage home = new HomePage(driver);
+            home.open();
+            test.info("Home page opened.");
 
-	        List<String> cardGenres = home.getResultGenres();
-	        test.info("Genres extracted from cards: " + cardGenres);
+            String searchTerm = "Batman";
+            test.info("Searching for: " + searchTerm);
 
-	        if (!cardGenres.isEmpty()) {
-	            List<String> mismatches = cardGenres.stream()
-	                .filter(g -> !g.toLowerCase().contains(genre.toLowerCase()))
-	                .collect(java.util.stream.Collectors.toList());
+            home.searchByTitle(searchTerm);
 
-	            if (!mismatches.isEmpty()) {
-	                test.warning("BUG-04: Mixed genres detected: " + mismatches);
-	                Assert.fail("BUG-04: Genre filter returned non-matching genres: " + mismatches);
-	            } else {
-	                test.pass("All results match genre: " + genre);
-	            }
-	        } else {
-	            test.warning("Genre labels not extractable — skipping genre assertion.");
-	        }
-	    } catch (AssertionError ae) {
-	        test.fail("Assertion failed: " + ae.getMessage());
-	        throw ae;
-	    } catch (Exception e) {
-	        test.fail("Unexpected exception: " + e.getMessage());
-	        log.severe("TC-F7 failed with exception: " + e.getMessage());
-	        throw e;
-	    }
-	}
-	
-	@Test(description = "TC-F8: Verify direct URL navigation. BUG-01 — Surge.sh 404 shown on direct access.")
-	public void directUrlNavigation() {
-	    startTest("TC-F8 - Direct URL Navigation");
-	    try {
-	        test.info("Testing direct URL navigation for known broken routes...");
-	        HomePage home = new HomePage(driver);
+            List<String> titles = home.getResultTitles();
+            test.info("Results returned: " + titles.size());
 
-	        String[] brokenRoutes = {
-	            "https://tmdb-discover.surge.sh/popular",
-	            "https://tmdb-discover.surge.sh/top"
-	        };
+            Assert.assertFalse(titles.isEmpty(),
+                    "Expected results for title search: " + searchTerm);
 
-	        for (String url : brokenRoutes) {
-	            test.info("Navigating to: " + url);
-	            driver.get(url);
+            boolean anyMatch = titles.stream()
+                    .anyMatch(t -> t.toLowerCase().contains(searchTerm.toLowerCase()));
+            Assert.assertTrue(anyMatch,
+                    "At least one result should contain: " + searchTerm);
 
-	            new org.openqa.selenium.support.ui.WebDriverWait(driver,
-	                java.time.Duration.ofSeconds(8))
-	                .until(d -> ((org.openqa.selenium.JavascriptExecutor) d)
-	                    .executeScript("return document.readyState").equals("complete"));
+            test.pass("Title search for '" + searchTerm + "' returned matching results.");
+        } catch (AssertionError ae) {
+            test.fail("Assertion failed: " + ae.getMessage());
+            throw ae;
+        } catch (Exception e) {
+            test.fail("Exception: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
 
-	            boolean hasResults  = home.getResultCount() > 0;
-	            boolean hasError    = home.isPageError();
-	            String  pageSource  = driver.getPageSource().toLowerCase();
-	            boolean surge404    = pageSource.contains("page not found")
-	                               || pageSource.contains("powered by")
-	                               || pageSource.contains("surge.sh");
+    // -------------------------------------------------------------------------
+    // TC-F6
+    // -------------------------------------------------------------------------
 
-	            test.info("Results visible: " + hasResults);
-	            test.info("App error detected: " + hasError);
-	            test.info("Surge 404 detected: " + surge404);
+    @Test(description = "TC-F6: Verify rating filter changes result cards.")
+    public void filterByRating() {
+        startTest("TC-F6 - Filter by Rating");
+        try {
+            test.info("Opening home page...");
+            HomePage home = new HomePage(driver);
+            home.open();
+            test.info("Home page opened.");
 
-	            if (!hasResults || hasError || surge404) {
-	                test.warning("BUG-01: '" + url + "' shows 404 instead of app content.");
-	                Assert.fail("BUG-01: Direct URL '" + url + "' not working — 404 page displayed.");
-	            } else {
-	                test.pass("Direct navigation to " + url + " loaded successfully.");
-	            }
-	        }
-	    } catch (AssertionError ae) {
-	        test.fail("Assertion failed: " + ae.getMessage());
-	        throw ae;
-	    } catch (Exception e) {
-	        test.fail("Unexpected exception: " + e.getMessage());
-	        log.severe("TC-F8 failed with exception: " + e.getMessage());
-	        throw e;
-	    }
-	}
+            List<String> baseline = home.getResultTitles();
+            test.info("Baseline results (no filter): " + baseline.size());
+
+            home.setRating(1);
+            test.info("Rating filter applied: 1 star & up");
+            List<String> oneStar = home.getResultTitles();
+            test.info("Results after 1 star: " + oneStar.size());
+
+            Assert.assertFalse(oneStar.isEmpty(),
+                    "Expected results after applying 1-star rating filter.");
+
+            home.setRating(5);
+            test.info("Rating filter applied: 5 stars & up");
+            List<String> fiveStar = home.getResultTitles();
+            test.info("Results after 5 stars: " + fiveStar.size());
+
+            Assert.assertFalse(fiveStar.isEmpty(),
+                    "Expected results after applying 5-star rating filter.");
+
+            // A stricter threshold should return fewer or equal results, not more.
+            Assert.assertTrue(fiveStar.size() <= oneStar.size(),
+                    "5-star filter should return fewer or equal results than 1-star filter. "
+                    + "Got: 1-star=" + oneStar.size() + ", 5-star=" + fiveStar.size());
+
+            // The two result sets should differ (rating filter has a real effect).
+            Assert.assertNotEquals(oneStar, fiveStar,
+                    "1-star and 5-star filters should return different result sets.");
+
+            test.pass("Rating filter working — 1-star returned " + oneStar.size()
+                    + " results, 5-star returned " + fiveStar.size() + " results.");
+        } catch (AssertionError ae) {
+            test.fail("Assertion failed: " + ae.getMessage());
+            throw ae;
+        } catch (Exception e) {
+            test.fail("Exception: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // TC-F7
+    // -------------------------------------------------------------------------
+
+    @Test(description = "TC-F7: Verify genre filter. BUG-04 — mixed genres returned.")
+    public void filterByGenre() {
+        startTest("TC-F7 - Filter by Genre");
+        try {
+            test.info("Opening home page...");
+            HomePage home = new HomePage(driver);
+            home.open();
+            test.info("Home page opened.");
+
+            String genre = "Action";
+            test.info("Selecting genre: " + genre);
+            home.selectGenre(genre);
+            test.info("Genre selected.");
+
+            int count = home.getResultCount();
+            test.info("Results returned: " + count);
+
+            List<String> genres = home.getResultGenres();
+            test.info("Genres on cards: " + genres);
+
+            List<String> nonMatching = genres.stream()
+                    .filter(g -> !g.equalsIgnoreCase(genre))
+                    .distinct()
+                    .collect(Collectors.toList());
+
+            if (!nonMatching.isEmpty()) {
+                takeScreenshot("BUG04_GenreFilter_MixedResults");
+                test.warning("BUG-04: Mixed genres detected: " + nonMatching);
+                Assert.fail("BUG-04: Genre filter returned non-matching genres: " + nonMatching);
+            } else {
+                test.pass("Genre filter working — all " + count + " results are Action.");
+            }
+        } catch (AssertionError ae) {
+            test.fail("Assertion failed: " + ae.getMessage());
+            throw ae;
+        } catch (Exception e) {
+            test.fail("Exception: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // TC-F8
+    // -------------------------------------------------------------------------
+
+    @Test(description = "TC-F8: Verify direct URL navigation. BUG-01 — Surge.sh 404 on direct access.")
+    public void directUrlNavigation() {
+        startTest("TC-F8 - Direct URL Navigation");
+        try {
+            test.info("Testing direct URL navigation for known broken routes...");
+            HomePage home = new HomePage(driver);
+
+            String[] brokenRoutes = {
+                "https://tmdb-discover.surge.sh/popular",
+                "https://tmdb-discover.surge.sh/top"
+            };
+
+            for (String url : brokenRoutes) {
+                test.info("Navigating to: " + url);
+                driver.get(url);
+
+                new org.openqa.selenium.support.ui.WebDriverWait(driver,
+                        java.time.Duration.ofSeconds(8))
+                        .until(d -> ((org.openqa.selenium.JavascriptExecutor) d)
+                                .executeScript("return document.readyState").equals("complete"));
+
+                boolean hasResults = home.getResultCount() > 0;
+                boolean hasError   = home.isPageError();
+                String  pageSource = driver.getPageSource().toLowerCase();
+                boolean surge404   = pageSource.contains("page not found")
+                                  || pageSource.contains("powered by")
+                                  || pageSource.contains("surge.sh");
+
+                test.info("Results visible: " + hasResults);
+                test.info("App error detected: " + hasError);
+                test.info("Surge 404 detected: " + surge404);
+
+                if (!hasResults || hasError || surge404) {
+                    test.warning("BUG-01: '" + url + "' shows 404 instead of app content.");
+                    Assert.fail("BUG-01: Direct URL '" + url + "' not working — 404 page displayed.");
+                } else {
+                    test.pass("Direct navigation to " + url + " loaded successfully.");
+                }
+            }
+        } catch (AssertionError ae) {
+            test.fail("Assertion failed: " + ae.getMessage());
+            throw ae;
+        } catch (Exception e) {
+            test.fail("Unexpected exception: " + e.getMessage());
+            log.severe("TC-F8 exception: " + e.getMessage());
+            throw e;
+        }
+    }
 }

@@ -46,19 +46,13 @@ public class BaseTest {
 
     @BeforeMethod(alwaysRun = true)
     public void setUp(java.lang.reflect.Method method) {
-        // webDriverManager times out on restricted networks because it tries
-        // to resolve the ChromeDriver version from the internet. Setting a short
-        // timeout and forcing it to use any locally cached driver prevents
-        // HttpConnectTimeoutException from skipping all FilterTests at setUp().
-        io.github.bonigarcia.wdm.WebDriverManager.chromedriver()
-            .timeout(10)
-            .avoidResolutionCache()
-            .setup();
+    	// Selenium 4.6+ includes Selenium Manager built-in — no external
+        // driver manager needed. new ChromeDriver() resolves the driver automatically.
         driver = DriverFactory.createDriver();
         if (driver == null) {
             Assert.fail("WebDriver could not be created — setUp failed for: " + method.getName());
         }
-
+        
         // create a placeholder node immediately so tearDown always has
         // something to write to, even if the test method body is never entered.
         // We store the node in 'test' — startTest() will rename it rather than
